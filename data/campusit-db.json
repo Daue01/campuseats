@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "id": "user_b18de7a5b34d",
+      "role": "vendor",
+      "name": "David Tester",
+      "email": "daveudonsi@gmail.com",
+      "passwordHash": "527cae641130a31d54f96416c189d9d0:7974982e0abcbd4bfe4fdc632cb75f97412905d4019116e59c56142eee930f0eda23459fdfed917395a83011e7a0050301014819e6537c18e1d13abfa2068e0e",
+      "campus": "",
+      "phone": "0812345678",
+      "savedVendorIds": [],
+      "createdAt": "2026-04-25T12:26:47.345Z"
+    }
+  ],
+  "vendorProfiles": [
+    {
+      "id": "mama-choba-b34d",
+      "userId": "user_b18de7a5b34d",
+      "businessName": "Mama Choba",
+      "logo": "/uploads/upload_b5f622778101.png",
+      "description": "Great Stuff",
+      "location": "Amino Kano Hostel",
+      "category": "Meals",
+      "phone": "0812345678",
+      "views": 3,
+      "orders": 0,
+      "messages": 0,
+      "createdAt": "2026-04-25T12:26:47.359Z",
+      "updatedAt": "2026-04-25T15:22:07.755Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "product_01603976eaaf",
+      "vendorId": "mama-choba-b34d",
+      "title": "Test 1",
+      "price": 1000,
+      "image": "/uploads/upload_d3d788e8411e.jpeg",
+      "description": "GRA",
+      "category": "Meals",
+      "inStock": true,
+      "createdAt": "2026-04-25T12:28:13.268Z",
+      "updatedAt": "2026-04-25T12:28:13.268Z"
+    }
+  ]
+}

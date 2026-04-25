@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(circle at top right, rgba(255, 107, 0, 0.12), transparent 24rem),
+    radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.08), transparent 22rem),
+    #fff8f0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: rgba(255, 107, 0, 0.18);
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+}
+
+.auth-input {
+  @apply rounded-[18px] border border-stone-200 bg-white px-4 py-3.5 text-sm text-stone-900 outline-none ring-0 placeholder:text-stone-400 focus:border-orange-400 focus:shadow-[0_0_0_4px_rgba(255,107,0,0.12)];
+}
+
+.surface-card {
+  @apply rounded-[28px] border border-white/70 bg-white/90 shadow-[0_22px_65px_rgba(25,18,9,0.08)] backdrop-blur;
+}
+
+.section-shell {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.chip {
+  @apply inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-stone-600 transition;
+}
+
+.chip-active {
+  @apply border-orange-200 bg-orange-500 text-white shadow-[0_12px_26px_rgba(255,107,0,0.22)];
+}
