@@ -5,12 +5,12 @@ import ProductCard from '@/components/ui/ProductCard'
 import VendorCard from '@/components/ui/VendorCard'
 import { FAQS } from '@/lib/constants'
 import { CATEGORY_SPOTLIGHTS, EXPERIENCE_PILLARS, HERO_STATS, TESTIMONIALS } from '@/lib/marketing'
-import { listPublicProducts, listPublicVendors } from '@/lib/server/db'
+import { getSafeMarketplaceData } from '@/lib/server/runtime'
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const [vendors, products] = await Promise.all([listPublicVendors(), listPublicProducts({})])
+  const { vendors, products, error } = await getSafeMarketplaceData()
 
   const featuredVendors = vendors.slice(0, 3)
   const featuredProducts = products.slice(0, 3)
@@ -127,14 +127,20 @@ export default async function HomePage() {
 
       <section className="section-shell py-4">
         <div className="surface-card px-5 py-5 sm:px-6">
-          <div className="flex flex-wrap gap-3">
-            {CATEGORY_SPOTLIGHTS.map((item) => (
-              <span key={item.label} className="inline-flex items-center gap-2 rounded-full bg-[#fff4ea] px-4 py-2 text-sm font-semibold text-stone-700">
-                <span>{item.emoji}</span>
-                {item.label}
-              </span>
-            ))}
-          </div>
+          {error ? (
+            <div className="rounded-[24px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-7 text-amber-900">
+              Marketplace data is temporarily unavailable. Check your Supabase environment variables and Vercel function logs.
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-3">
+              {CATEGORY_SPOTLIGHTS.map((item) => (
+                <span key={item.label} className="inline-flex items-center gap-2 rounded-full bg-[#fff4ea] px-4 py-2 text-sm font-semibold text-stone-700">
+                  <span>{item.emoji}</span>
+                  {item.label}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

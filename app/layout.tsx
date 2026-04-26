@@ -4,7 +4,7 @@ import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { ToastProvider } from '@/components/providers/ToastProvider'
-import { getSession } from '@/lib/server/auth'
+import { getSafeSession } from '@/lib/server/runtime'
 
 const bodyFont = DM_Sans({
   subsets: ['latin'],
@@ -28,7 +28,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getSession()
+  const session = await getSafeSession()
 
   return (
     <html lang="en" className={`${bodyFont.variable} ${displayFont.variable}`}>
