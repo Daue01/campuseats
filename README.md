@@ -1,4 +1,4 @@
-# 🍽️ CampusEats — Campus Food Ordering Platform
+# CampusEats Campus Food Ordering Platform
 
 > "Hot food. Fast delivery. Zero stress."
 
