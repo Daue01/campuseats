@@ -26,6 +26,14 @@ async function ensureBucket() {
     })
 
     if (createError && !createError.message.toLowerCase().includes('already exists')) {
+      const message = createError.message.toLowerCase()
+
+      if (message.includes('row-level security') || message.includes('not allowed')) {
+        throw new Error(
+          'Could not create the Supabase storage bucket. Check that SUPABASE_SERVICE_ROLE_KEY is a real service role key and that storage is enabled for this project.',
+        )
+      }
+
       throw new Error(`Could not create the Supabase storage bucket. ${createError.message}`)
     }
   })().catch((error) => {
@@ -59,6 +67,12 @@ export async function saveUpload(file: File) {
   })
 
   if (error) {
+    const message = error.message.toLowerCase()
+
+    if (message.includes('bucket') && message.includes('not found')) {
+      throw new Error(`Upload failed. Create the "${bucket}" storage bucket in Supabase first.`)
+    }
+
     throw new Error(`Upload failed. ${error.message}`)
   }
 

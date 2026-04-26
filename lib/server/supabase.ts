@@ -12,6 +12,18 @@ function requireEnv(name: string) {
   return value
 }
 
+function requireServiceRoleKey() {
+  const key = requireEnv('SUPABASE_SERVICE_ROLE_KEY')
+
+  if (key.startsWith('sb_publishable_') || key.startsWith('sb_secret_')) {
+    throw new Error(
+      'SUPABASE_SERVICE_ROLE_KEY must be a server-side service role key from Supabase, not a publishable or secret API key.',
+    )
+  }
+
+  return key
+}
+
 export function getSupabaseUrl() {
   return process.env.SUPABASE_URL ?? requireEnv('NEXT_PUBLIC_SUPABASE_URL')
 }
@@ -25,7 +37,7 @@ export function getSupabaseAdmin() {
     return supabaseAdmin
   }
 
-  supabaseAdmin = createClient(getSupabaseUrl(), requireEnv('SUPABASE_SERVICE_ROLE_KEY'), {
+  supabaseAdmin = createClient(getSupabaseUrl(), requireServiceRoleKey(), {
     auth: {
       autoRefreshToken: false,
       persistSession: false,

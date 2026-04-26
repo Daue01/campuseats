@@ -26,63 +26,67 @@ function validateSignup(payload: SignupPayload) {
 }
 
 export async function POST(request: NextRequest) {
-  const payload = (await request.json()) as SignupPayload
-  const error = validateSignup(payload)
+  try {
+    const payload = (await request.json()) as SignupPayload
+    const error = validateSignup(payload)
 
-  if (error) {
-    return jsonError(400, error)
-  }
-
-  const existing = await findUserByEmail(payload.email)
-
-  if (existing) {
-    return jsonError(409, 'An account with that email already exists.')
-  }
-
-  const user: UserRecord = {
-    id: createId('user'),
-    role: payload.role,
-    name: payload.fullName.trim(),
-    email: payload.email.trim().toLowerCase(),
-    passwordHash: hashPassword(payload.password),
-    campus: payload.campus?.trim(),
-    phone: payload.phoneNumber?.trim(),
-    savedVendorIds: [],
-    createdAt: new Date().toISOString(),
-  }
-
-  await createUser(user)
-
-  if (payload.role === 'vendor') {
-    const vendorProfile: VendorProfile = {
-      id: `${slugify(payload.businessName!)}-${user.id.slice(-4)}`,
-      userId: user.id,
-      businessName: payload.businessName!.trim(),
-      logo: payload.logo!,
-      description: payload.businessDescription!.trim(),
-      location: payload.location!.trim(),
-      category: payload.category!.trim(),
-      phone: payload.phoneNumber!.trim(),
-      views: 0,
-      orders: 0,
-      messages: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+    if (error) {
+      return jsonError(400, error)
     }
 
-    await createVendorProfile(vendorProfile)
-  }
+    const existing = await findUserByEmail(payload.email)
 
-  const response = NextResponse.json(
-    {
-      ok: true,
-      data: {
-        redirectTo: payload.role === 'vendor' ? '/vendor' : '/student',
+    if (existing) {
+      return jsonError(409, 'An account with that email already exists.')
+    }
+
+    const user: UserRecord = {
+      id: createId('user'),
+      role: payload.role,
+      name: payload.fullName.trim(),
+      email: payload.email.trim().toLowerCase(),
+      passwordHash: hashPassword(payload.password),
+      campus: payload.campus?.trim(),
+      phone: payload.phoneNumber?.trim(),
+      savedVendorIds: [],
+      createdAt: new Date().toISOString(),
+    }
+
+    await createUser(user)
+
+    if (payload.role === 'vendor') {
+      const vendorProfile: VendorProfile = {
+        id: `${slugify(payload.businessName!)}-${user.id.slice(-4)}`,
+        userId: user.id,
+        businessName: payload.businessName!.trim(),
+        logo: payload.logo!,
+        description: payload.businessDescription!.trim(),
+        location: payload.location!.trim(),
+        category: payload.category!.trim(),
+        phone: payload.phoneNumber!.trim(),
+        views: 0,
+        orders: 0,
+        messages: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+
+      await createVendorProfile(vendorProfile)
+    }
+
+    const response = NextResponse.json(
+      {
+        ok: true,
+        data: {
+          redirectTo: payload.role === 'vendor' ? '/vendor' : '/student',
+        },
       },
-    },
-    { status: 201 },
-  )
+      { status: 201 },
+    )
 
-  attachSessionCookie(response, user.id)
-  return response
+    attachSessionCookie(response, user.id)
+    return response
+  } catch (error) {
+    return jsonError(500, error instanceof Error ? error.message : 'Could not create account.')
+  }
 }
