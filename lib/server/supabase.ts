@@ -12,6 +12,18 @@ function requireEnv(name: string) {
   return value
 }
 
+function requireAnyEnv(names: string[]) {
+  for (const name of names) {
+    const value = process.env[name]
+
+    if (value) {
+      return value
+    }
+  }
+
+  throw new Error(`Missing required environment variable: one of ${names.join(', ')}`)
+}
+
 function requireServiceRoleKey() {
   const key = requireEnv('SUPABASE_SERVICE_ROLE_KEY')
 
@@ -25,7 +37,7 @@ function requireServiceRoleKey() {
 }
 
 export function getSupabaseUrl() {
-  return process.env.SUPABASE_URL ?? requireEnv('NEXT_PUBLIC_SUPABASE_URL')
+  return requireAnyEnv(['SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_URL'])
 }
 
 export function getSupabaseStorageBucket() {
