@@ -2,12 +2,12 @@ import Link from 'next/link'
 import { ArrowRight, Store } from 'lucide-react'
 import EmptyState from '@/components/ui/EmptyState'
 import VendorCard from '@/components/ui/VendorCard'
-import { getSafeVendors } from '@/lib/server/runtime'
+import { listPublicVendors } from '@/lib/server/db'
 
 export const dynamic = 'force-dynamic'
 
 export default async function VendorsPage() {
-  const { vendors, error } = await getSafeVendors()
+  const vendors = await listPublicVendors()
 
   return (
     <div className="section-shell space-y-8 py-12">
@@ -38,12 +38,6 @@ export default async function VendorsPage() {
           </div>
         </div>
       </section>
-
-      {error ? (
-        <div className="rounded-[28px] border border-amber-200 bg-amber-50 px-6 py-5 text-sm leading-7 text-amber-900">
-          Vendor directory data is temporarily unavailable. Verify your Supabase environment variables in Vercel and review the function logs for the underlying error.
-        </div>
-      ) : null}
 
       {vendors.length === 0 ? (
         <EmptyState
